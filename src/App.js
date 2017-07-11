@@ -1,14 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
       <div>
         <Headline>Hello React</Headline>
+
         <Paragraph>
           That's how you would use children in React
         </Paragraph>
+
+        <SubHeadlineWithContext>
+          Children and Context
+        </SubHeadlineWithContext>
       </div>
     );
   }
@@ -31,7 +36,7 @@ Headline.contextTypes = {
 
 // (ES Class Component) Context Consumer
 
-class Paragraph extends Component {
+class Paragraph extends React.Component {
   render() {
     const { coloredTheme } = this.context;
     return (
@@ -45,6 +50,36 @@ class Paragraph extends Component {
 Paragraph.contextTypes = {
   coloredTheme: PropTypes.string
 };
+
+// HOC as Context Consumer (1)
+
+const getContext = contextTypes => Component => {
+  class GetContext extends React.Component {
+    render() {
+      return <Component { ...this.props } { ...this.context } />
+    }
+  }
+
+  GetContext.contextTypes = contextTypes;
+
+  return GetContext;
+};
+
+// Component using the HOC (1) to consume context
+
+function SubHeadline(props) {
+  return (
+    <h2 style={{ color: props.coloredTheme }}>
+      {props.children}
+    </h2>
+  );
+}
+
+const contextTypes = {
+  coloredTheme: PropTypes.string
+};
+
+const SubHeadlineWithContext = getContext(contextTypes)(SubHeadline);
 
 // Provider
 
