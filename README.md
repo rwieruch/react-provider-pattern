@@ -1,6 +1,6 @@
-# react-provider-pattern
+# React's Provider Pattern with Context API
 
-Showcase on how to use the provider pattern in React. Read more about it in this article: [Provider Pattern in React](https://www.robinwieruch.de/react-provider-pattern-context)
+Showcase on how to use the provider pattern in React. Read more about it in this article: [Provider Pattern in React](https://www.robinwieruch.de/react-provider-pattern-context). It uses [React's 16.3 context API](https://reactjs.org/blog/2018/03/29/react-v-16-3.html).
 
 ## Installation
 
@@ -8,5 +8,5 @@ Showcase on how to use the provider pattern in React. Read more about it in this
 * `cd react-provider-pattern`
 * `npm install`
 * `npm start`
-* visit http://localhost:3000/
+* visit http://localhost:3000
 

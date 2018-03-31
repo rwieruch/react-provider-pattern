@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 
-import App, { ThemeProvider } from './App';
-
-const coloredTheme = "green";
+import App from './App';
+import ThemeContext from './ThemeContext';
 
 ReactDOM.render(
-  <ThemeProvider coloredTheme={coloredTheme}>
+  <ThemeContext.Provider value={'green'}>
     <App />
-  </ThemeProvider>,
+  </ThemeContext.Provider>,
   document.getElementById('root')
 );
 
