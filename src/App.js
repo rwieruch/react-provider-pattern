@@ -1,6 +1,5 @@
 import React from 'react';
-
-import ThemeContext from './ThemeContext';
+import PropTypes from 'prop-types';
 
 class App extends React.Component {
   render() {
@@ -22,46 +21,49 @@ class App extends React.Component {
 
 // (Functional Sateless Component) Context Consumer
 
-function Headline(props) {
+function Headline(props, context) {
+  const { coloredTheme } = context;
   return (
-    <ThemeContext.Consumer>
-      {coloredTheme =>
-        <h1 style={{ color: coloredTheme }}>
-          {props.children}
-        </h1>
-      }
-    </ThemeContext.Consumer>
+    <h1 style={{ color: coloredTheme }}>
+      {props.children}
+    </h1>
   );
 }
+
+Headline.contextTypes = {
+  coloredTheme: PropTypes.string
+};
 
 // (ES Class Component) Context Consumer
 
 class Paragraph extends React.Component {
   render() {
+    const { coloredTheme } = this.context;
     return (
-      <ThemeContext.Consumer>
-        {coloredTheme =>
-          <p style={{ color: coloredTheme }}>
-            {this.props.children}
-          </p>
-        }
-      </ThemeContext.Consumer>
+      <p style={{ color: coloredTheme }}>
+        {this.props.children}
+      </p>
     );
   }
 }
 
+Paragraph.contextTypes = {
+  coloredTheme: PropTypes.string
+};
+
 // HOC as Context Consumer (1)
 
-const getContext = Component =>
+const getContext = contextTypes => Component => {
   class GetContext extends React.Component {
     render() {
-      return (
-        <ThemeContext.Consumer>
-          {coloredTheme => <Component { ...this.props } coloredTheme={coloredTheme} />}
-        </ThemeContext.Consumer>
-      );
+      return <Component { ...this.props } { ...this.context } />
     }
   }
+
+  GetContext.contextTypes = contextTypes;
+
+  return GetContext;
+};
 
 // Component using the HOC (1) to consume context
 
@@ -73,6 +75,32 @@ function SubHeadline(props) {
   );
 }
 
-const SubHeadlineWithContext = getContext(SubHeadline);
+const contextTypes = {
+  coloredTheme: PropTypes.string
+};
+
+const SubHeadlineWithContext = getContext(contextTypes)(SubHeadline);
+
+// Provider
+
+class ThemeProvider extends React.Component {
+  getChildContext() {
+    return {
+      coloredTheme: this.props.coloredTheme
+    };
+  }
+
+  render() {
+    return <div>{this.props.children}</div>;
+  }
+}
+
+ThemeProvider.childContextTypes = {
+  coloredTheme: PropTypes.string
+};
+
+export {
+  ThemeProvider,
+};
 
 export default App;
